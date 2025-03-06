@@ -4,6 +4,9 @@ from faker.providers import BaseProvider
 import uuid
 import random
 import json
+from datetime import datetime, timedelta
+import random
+
 
 app = Flask(__name__)
 fake = Faker()
@@ -12,6 +15,18 @@ fake = Faker()
 VALID_SECRET_KEY = "secure_key_123"
 VALID_SECRET_PASSWORD = "82a0ffb8demshb019075fd8277f0p132d00jsndaaaab570f69"
 REQUIRED_RECORDS = random.randint(1, 1000)
+
+def generate_randomdate():
+    # Define the date range
+    start_date = datetime.now() - timedelta(days=10)
+    end_date = datetime.now()
+
+    # Generate a random datetime
+    random_date = start_date + timedelta(seconds=random.randint(0, int((end_date - start_date).total_seconds())))
+
+    formatted_date = random_date.strftime("%Y-%m-%d %H:%M:%S")
+    return formatted_date
+
 
 class SecurityError(Exception):
     pass
@@ -47,13 +62,13 @@ class RealEstateProvider(BaseProvider):
         }
     
     def image_urls(self, count):
-        base_url = "https://ssl.cdn-redfin.com/photo/rent/"
+        base_url = "https://ssl.cdn-myproperty.com/photo/rent/"
         return [f"{base_url}{uuid.uuid4()}/islphoto/genIsl.{i}_{random.choice([1, 2])}.jpg" for i in range(count)]
 
 fake.add_provider(RealEstateProvider)
 
 def generate_home_data():
-    small_photos_count = random.randint(30, 60)
+    small_photos_count = random.randint(1, 20)
     return {
         "propertyId": str(fake.random_number(digits=9)),
         "url": f"/{fake.state_abbr()}/{fake.city().replace(' ', '-')}/{fake.word()}/{fake.random_number(digits=9)}",
@@ -106,14 +121,14 @@ def generate_rental_extension():
             "min": random.randint(2000, 3000),
             "max": random.randint(3000, 5000)
         },
-        "lastUpdated": fake.iso8601(tzinfo=None),
+        "lastUpdated": generate_randomdate(),
         "numAvailableUnits": random.randint(1, 100),
         "status": random.randint(0, 2),
         "propertyName": fake.street_name(),
         "rentalDetailsPageType": random.randint(1, 10),
         "rentalPropertyExternalUrl": fake.url(),
         "searchRankScore": round(random.uniform(0.5, 1.5), 2),
-        "freshnessTimestamp": fake.iso8601(tzinfo=None),
+        "freshnessTimestamp": generate_randomdate(),
         "description": fake.paragraph(),
         "revenuePerLead": round(random.uniform(10.0, 50.0), 5),
         "feedSourceInternalId": str(fake.random_number(digits=9)),
@@ -167,4 +182,4 @@ def generate_properties():
         abort(500, description=str(des))
 
 # if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5001, debug=True)
+#     app.run(host='0.0.0.0', port=5003, debug=True)
