@@ -90,6 +90,8 @@ def generate_home_data():
             "city": fake.city(),
             "state": fake.state_abbr(),
             "zip": fake.zipcode(),
+            "country": fake.country(),
+            "altAddress": fake.address(),
             "streetlineDisplayLevel": 1,
             "unitNumberDisplayLevel": 1,
             "locationDisplayLevel": 1,
