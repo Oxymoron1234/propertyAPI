@@ -14,7 +14,7 @@ fake = Faker()
 # Configuration
 VALID_SECRET_KEY = "secure_key_123"
 VALID_SECRET_PASSWORD = "82a0ffb8demshb019075fd8277f0p132d00jsndaaaab570f69"
-REQUIRED_RECORDS = random.randint(1000, 10000)
+REQUIRED_RECORDS = random.randint(500, 5000)
 
 def generate_randomdate():
     # Define the date range
